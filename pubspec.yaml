@@ -1,8 +1,8 @@
 name: api_client
 description: A simple schema api client
 version: 0.0.1
-author: me@dotronglong.com
-homepage: dotronglong.com
+author: Lucas <me@dotronglong.com>
+homepage: https://github.com/dotronglong/dart-api-client
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: 0.12.0+1
+  http: ^0.12.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

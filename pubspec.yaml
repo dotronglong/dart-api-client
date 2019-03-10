@@ -1,8 +1,8 @@
 name: api_client
-description: A new Flutter package project.
+description: A simple schema api client
 version: 0.0.1
-author:
-homepage:
+author: me@dotronglong.com
+homepage: dotronglong.com
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

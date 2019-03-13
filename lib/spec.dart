@@ -37,7 +37,7 @@ class Spec {
     Map endpoint = this.endpoints[name];
     if (!endpoint.containsKey(SPEC_URI)
     || !endpoint.containsKey(SPEC_METHOD)) {
-      throw Exception('Insufficient endpoint argments');
+      throw Exception('Insufficient endpoint arguments');
     }
 
     Request request = Request(endpoint[SPEC_URI], endpoint[SPEC_METHOD]);

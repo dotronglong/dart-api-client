@@ -1,9 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:api_client/spec.dart';
-import 'package:api_client/request.dart';
-import 'package:api_client/transporter.dart';
+import 'package:api_client/api_client.dart';
 
 class MockTransporter extends Mock implements Transporter {}
 

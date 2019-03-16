@@ -4,9 +4,9 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 
-import 'replacer.dart';
-import 'request.dart';
-import 'transporter.dart';
+import 'package:api_client/src/replacer.dart';
+import 'package:api_client/src/request.dart';
+import 'package:api_client/src/transporter.dart';
 
 
 class Spec {

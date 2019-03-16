@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
-import 'package:api_client/replacer.dart';
+import 'package:api_client/api_client.dart';
 
 void main() {
   test('replace parameters', () {

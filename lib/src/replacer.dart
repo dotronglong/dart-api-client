@@ -1,10 +1,10 @@
 class Replacer {
-  String markerStart  = '{{';
-  String markerEnd    = '}}';
+  String markerStart = '{{';
+  String markerEnd = '}}';
 
   Replacer({String markerStart, String markerEnd}) {
-    if (markerStart != null) this.markerStart  = markerStart;
-    if (markerEnd != null) this.markerEnd    = markerEnd;
+    if (markerStart != null) this.markerStart = markerStart;
+    if (markerEnd != null) this.markerEnd = markerEnd;
   }
 
   String replace(String source, Map<String, String> parameters) {

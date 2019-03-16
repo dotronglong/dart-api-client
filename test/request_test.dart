@@ -21,6 +21,7 @@ void main() {
     Request request = Request('https://api.domain.com?foo=bar', 'Get');
     request.query['baz'] = 'foo';
     request.query['bar'] = 'foo';
-    expect(request.toString(), 'https://api.domain.com?foo=bar&baz=foo&bar=foo');
+    expect(
+        request.toString(), 'https://api.domain.com?foo=bar&baz=foo&bar=foo');
   });
 }

@@ -1,9 +1,12 @@
 library api_client;
 
-import 'package:api_client/replacer.dart';
-import 'package:api_client/request.dart';
-import 'package:api_client/transporter.dart';
+import 'dart:async';
+
 import 'package:http/http.dart' as http;
+
+import 'replacer.dart';
+import 'request.dart';
+import 'transporter.dart';
 
 
 class Spec {
@@ -16,9 +19,9 @@ class Spec {
   static const METHOD_PATCH   = 'PATCH';
   static const METHOD_DELETE  = 'DELETE';
 
-  List<Function> middlewares = [];
-  Map<String, String> parameters = Map();
-  Map<String, Map<String, String>> endpoints = Map();
+  var middlewares = <Function>[];
+  var parameters = <String, String>{};
+  var endpoints = <String, Map<String, String>>{};
   Replacer replacer = Replacer();
   Transporter transporter;
 
@@ -26,7 +29,7 @@ class Spec {
     if (endpoints != null) this.endpoints = endpoints;
     if (middlewares != null) this.middlewares = middlewares;
     if (parameters != null) this.parameters = parameters;
-    if (transporter != null ) this.transporter = transporter;
+    if (transporter != null) this.transporter = transporter;
     else this.transporter = HttpTransporter();
   }
 

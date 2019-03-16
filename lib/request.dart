@@ -10,10 +10,10 @@ class Request {
   @override
   String toString() {
     String url = this.url;
-    String query = "";
+    String query = '';
     this.query.forEach((key, value) {
-      if (query != "") {
-        query += "&";
+      if (query != '') {
+        query += '&';
       }
       query += '$key=$value';
     });

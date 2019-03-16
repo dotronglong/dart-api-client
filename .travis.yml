@@ -4,7 +4,12 @@ dart:
 dart_task:
   - test: --platform vm
   - dartanalyzer: --fatal-warnings lib
-  - dartfmt
+matrix:
+  include:
+    - dart: dev
+      dart_task: dartfmt
+branches:
+  only: [master]
 cache:
  directories:
    - $HOME/.pub-cache

@@ -8,13 +8,13 @@ class MockTransporter extends Mock implements Transporter {}
 void main() {
   test('throws Exception: endpoint not exist', () {
     var spec = Spec();
-    expect(() => spec.request("any"), throwsException);
+    expect(() => spec.call("any"), throwsException);
   });
 
   test('throws Exception: insufficient arguments', () {
     var spec = Spec();
     spec.endpoints.putIfAbsent("demo", () => Map());
-    expect(() => spec.request("demo"), throwsException);
+    expect(() => spec.call("demo"), throwsException);
   });
 
   test('should call all methods', () {
@@ -27,11 +27,11 @@ void main() {
       "delete_users": {"uri": "https://domain.com/users", "method": "DeLEte"}
     });
 
-    spec.request("get_users");
-    spec.request("post_users");
-    spec.request("put_users");
-    spec.request("patch_users");
-    spec.request("delete_users");
+    spec.call("get_users");
+    spec.call("post_users");
+    spec.call("put_users");
+    spec.call("patch_users");
+    spec.call("delete_users");
     verify(transporter.get("https://domain.com/users", headers: {})).called(1);
     verify(transporter.post("https://domain.com/users",
             headers: {}, body: null))
@@ -53,7 +53,7 @@ void main() {
       "api_domain": "api.domain.com"
     });
 
-    spec.request("get_users");
+    spec.call("get_users");
     verifyNever(transporter.get("https://{{api_domain}}/users", headers: {}));
     verify(transporter.get("https://api.domain.com/users", headers: {}))
         .called(1);
@@ -68,7 +68,7 @@ void main() {
       request.headers['authorization'] = 'token';
     });
 
-    spec.request("get_users");
+    spec.call("get_users");
     verify(transporter.get("https://api.domain.com/users",
         headers: {'authorization': 'token'})).called(1);
   });
@@ -79,7 +79,7 @@ void main() {
       "get_users": {"uri": "https://domain.com/users", "method": "Get"}
     });
 
-    spec.request("get_users", middleware: (Request request) {
+    spec.call("get_users", middleware: (Request request) {
       request.headers['authorization'] = 'token';
     });
     verify(transporter.get("https://domain.com/users",
@@ -97,7 +97,7 @@ void main() {
       "api_domain": "api.domain.com"
     });
 
-    spec.request("get_users", parameters: {"user_id": "10001"});
+    spec.call("get_users", parameters: {"user_id": "10001"});
     verifyNever(transporter
         .get("https://{{api_domain}}/users/{{user_id}}", headers: {}));
     verify(transporter.get("https://api.domain.com/users/10001", headers: {}))

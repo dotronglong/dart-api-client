@@ -38,7 +38,7 @@ class Spec {
       this.transporter = HttpTransporter();
   }
 
-  Future<http.Response> request(String name,
+  Future<http.Response> call(String name,
       {Function middleware, Map<String, String> parameters}) {
     if (!this.endpoints.containsKey(name)) {
       throw Exception('$name does not exist');

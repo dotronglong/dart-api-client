@@ -20,11 +20,11 @@ void main() {
   test('should call all methods', () {
     var transporter = MockTransporter();
     var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"uri": "https://domain.com/users", "method": "Get"},
-      "post_users": {"uri": "https://domain.com/users", "method": "post"},
-      "put_users": {"uri": "https://domain.com/users", "method": "put"},
-      "patch_users": {"uri": "https://domain.com/users", "method": "PATCH"},
-      "delete_users": {"uri": "https://domain.com/users", "method": "DeLEte"}
+      "get_users": {"url": "https://domain.com/users", "method": "Get"},
+      "post_users": {"url": "https://domain.com/users", "method": "post"},
+      "put_users": {"url": "https://domain.com/users", "method": "put"},
+      "patch_users": {"url": "https://domain.com/users", "method": "PATCH"},
+      "delete_users": {"url": "https://domain.com/users", "method": "DeLEte"}
     });
 
     spec.call("get_users");
@@ -48,7 +48,7 @@ void main() {
   test('should call method with global parameters', () {
     var transporter = MockTransporter();
     var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"uri": "https://{{api_domain}}/users", "method": "Get"}
+      "get_users": {"url": "https://{{api_domain}}/users", "method": "Get"}
     }, parameters: {
       "api_domain": "api.domain.com"
     });
@@ -62,7 +62,7 @@ void main() {
   test('should call method with global middlewares', () {
     var transporter = MockTransporter();
     var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"uri": "https://api.domain.com/users", "method": "Get"}
+      "get_users": {"url": "https://api.domain.com/users", "method": "Get"}
     });
     spec.middlewares.add((Request request) {
       request.headers['authorization'] = 'token';
@@ -76,7 +76,7 @@ void main() {
   test('should call get with headers', () {
     var transporter = MockTransporter();
     var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"uri": "https://domain.com/users", "method": "Get"}
+      "get_users": {"url": "https://domain.com/users", "method": "Get"}
     });
 
     spec.call("get_users", middleware: (Request request) {
@@ -90,7 +90,7 @@ void main() {
     var transporter = MockTransporter();
     var spec = Spec(transporter: transporter, endpoints: {
       "get_users": {
-        "uri": "https://{{api_domain}}/users/{{user_id}}",
+        "url": "https://{{api_domain}}/users/{{user_id}}",
         "method": "Get"
       }
     }, parameters: {

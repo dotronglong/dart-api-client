@@ -9,7 +9,7 @@ import 'package:api_client/src/request.dart';
 import 'package:api_client/src/transporter.dart';
 
 class Spec {
-  static const SPEC_URI = 'uri';
+  static const SPEC_URL = 'url';
   static const SPEC_METHOD = 'method';
 
   static const METHOD_GET = 'GET';
@@ -44,11 +44,11 @@ class Spec {
       throw Exception('$name does not exist');
     }
     Map endpoint = this.endpoints[name];
-    if (!endpoint.containsKey(SPEC_URI) || !endpoint.containsKey(SPEC_METHOD)) {
+    if (!endpoint.containsKey(SPEC_URL) || !endpoint.containsKey(SPEC_METHOD)) {
       throw Exception('Insufficient endpoint arguments');
     }
 
-    Request request = Request(endpoint[SPEC_URI], endpoint[SPEC_METHOD]);
+    Request request = Request(endpoint[SPEC_URL], endpoint[SPEC_METHOD]);
 
     middlewares.forEach((f) => f(request));
     if (middleware != null) {

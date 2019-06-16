@@ -4,21 +4,17 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 
-import 'package:api_client/src/replacer.dart';
-import 'package:api_client/src/request.dart';
-import 'package:api_client/src/transporter.dart';
+import 'method.dart';
+import 'middleware.dart';
+import 'replacer.dart';
+import 'request.dart';
+import 'transporter.dart';
 
 class Spec {
   static const SPEC_URL = 'url';
   static const SPEC_METHOD = 'method';
 
-  static const METHOD_GET = 'GET';
-  static const METHOD_POST = 'POST';
-  static const METHOD_PUT = 'PUT';
-  static const METHOD_PATCH = 'PATCH';
-  static const METHOD_DELETE = 'DELETE';
-
-  var middlewares = <Function>[];
+  var middlewares = <Middleware>[];
   var parameters = <String, String>{};
   var endpoints = <String, Map<String, String>>{};
   Replacer replacer = Replacer();
@@ -26,7 +22,7 @@ class Spec {
 
   Spec(
       {Map<String, Map<String, String>> endpoints,
-      List middlewares,
+      List<Middleware> middlewares,
       Map<String, String> parameters,
       Transporter transporter}) {
     if (endpoints != null) this.endpoints = endpoints;
@@ -49,11 +45,10 @@ class Spec {
     }
 
     Request request = Request(endpoint[SPEC_URL], endpoint[SPEC_METHOD]);
-
-    middlewares.forEach((f) => f(request));
     if (middleware != null) {
       middleware(request);
     }
+    middlewares.forEach((f) => f(request));
 
     String url = request.toString();
     url = this.replacer.replace(url, this.parameters);
@@ -63,21 +58,21 @@ class Spec {
 
     String method = request.method.toUpperCase();
     switch (method) {
-      case METHOD_GET:
+      case Method.GET:
         return this.transporter.get(url, headers: request.headers);
-      case METHOD_POST:
+      case Method.POST:
         return this
             .transporter
             .post(url, headers: request.headers, body: request.body);
-      case METHOD_PUT:
+      case Method.PUT:
         return this
             .transporter
             .put(url, headers: request.headers, body: request.body);
-      case METHOD_PATCH:
+      case Method.PATCH:
         return this
             .transporter
             .patch(url, headers: request.headers, body: request.body);
-      case METHOD_DELETE:
+      case Method.DELETE:
         return this.transporter.delete(url, headers: request.headers);
       default:
         throw Exception('Method $method is not supported');

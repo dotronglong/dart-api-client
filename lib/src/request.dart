@@ -17,8 +17,8 @@ class Request {
       }
       query += '$key=$value';
     });
-    if (this.query.length > 0) {
-      query = url.indexOf('?') >= 0 ? '&$query' : '?$query';
+    if (this.query.isNotEmpty) {
+      query = url.contains('?') ? '&$query' : '?$query';
     }
 
     return url + query;

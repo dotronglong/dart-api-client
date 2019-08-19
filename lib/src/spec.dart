@@ -28,10 +28,11 @@ class Spec {
     if (endpoints != null) this.endpoints = endpoints;
     if (middlewares != null) this.middlewares = middlewares;
     if (parameters != null) this.parameters = parameters;
-    if (transporter != null)
+    if (transporter != null) {
       this.transporter = transporter;
-    else
+    } else {
       this.transporter = HttpTransporter();
+    }
   }
 
   Future<http.Response> call(String name,

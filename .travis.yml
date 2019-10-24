@@ -1,15 +1,14 @@
 language: dart
 dart:
-  - dev
+  - stable
 dart_task:
   - test: --platform vm
   - dartanalyzer: --fatal-warnings lib
-matrix:
-  include:
-    - dart: dev
-      dart_task: dartfmt
+  - dartfmt: -n lib
 branches:
-  only: [master]
+  only:
+    - master
+    - 1.x
 cache:
  directories:
    - $HOME/.pub-cache

@@ -20,7 +20,7 @@ Spec spec = Spec(endpoints: {
 ```dart
 import 'package:api_client/api_client.dart';
 Spec spec = Spec();
-spec.middlewares.add((Request request) {
+spec.onSend((Request request) {
   request.headers[Constants.HEADER_CONTENT_TYPE] =
     Constants.CONTENT_TYPE_JSON_UTF8;
 });

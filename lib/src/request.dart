@@ -3,9 +3,11 @@ class Request {
   String method;
   Map<String, String> headers = Map();
   Map<String, String> query = Map();
+  Map<String, dynamic> attributes;
   dynamic body;
 
-  Request(this.url, this.method);
+  Request(this.url, this.method, {Map<String, dynamic> attributes})
+      : this.attributes = attributes == null ? Map() : attributes;
 
   @override
   String toString() {
@@ -23,4 +25,8 @@ class Request {
 
     return url + query;
   }
+
+  dynamic get(String key) => this.attributes[key];
+
+  void set(String key, dynamic value) => this.attributes[key] = value;
 }

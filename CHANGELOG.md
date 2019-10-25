@@ -1,3 +1,8 @@
+## [2.0.1] - Improve example
+
+* Add flutter example
+* Export response.dart
+
 ## [2.0.0] - New way for middlewares
 
 * Add onSend, onReceive and onError events

@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:test/test.dart';
-
 import 'package:api_client/api_client.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('JsonRequestMiddleware: empty body', () {

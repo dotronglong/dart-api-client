@@ -1,3 +1,9 @@
+## [2.1.0] - Improve endpoint specification
+
+* Use verbs get, post, patch, put, delete
+* Update example
+* Update test cases
+
 ## [2.0.1] - Improve example
 
 * Add flutter example

@@ -16,7 +16,7 @@ void main() {
 
   test('throws Exception: insufficient arguments', () {
     var spec = Spec();
-    spec.endpoints.putIfAbsent("demo", () => Map());
+    spec.endpoints.putIfAbsent("demo", () => HttpSpec("", ""));
     spec.onError((request, response, exception) {
       expect(exception, isNotNull);
       expect(exception.toString(),
@@ -28,11 +28,11 @@ void main() {
   test('should call all methods', () async {
     var transporter = MockTransporter();
     var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"url": "https://domain.com/users", "method": "Get"},
-      "post_users": {"url": "https://domain.com/users", "method": "post"},
-      "put_users": {"url": "https://domain.com/users", "method": "put"},
-      "patch_users": {"url": "https://domain.com/users", "method": "PATCH"},
-      "delete_users": {"url": "https://domain.com/users", "method": "DeLEte"}
+      "get_users": get("https://domain.com/users"),
+      "post_users": post("https://domain.com/users"),
+      "put_users": put("https://domain.com/users"),
+      "patch_users": patch("https://domain.com/users"),
+      "delete_users": HttpSpec("DeLEte", "https://domain.com/users")
     });
 
     await spec.call("get_users");
@@ -55,11 +55,10 @@ void main() {
 
   test('should call method with global parameters', () async {
     var transporter = MockTransporter();
-    var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"url": "https://{{api_domain}}/users", "method": "Get"}
-    }, parameters: {
-      "api_domain": "api.domain.com"
-    });
+    var spec = Spec(
+        transporter: transporter,
+        endpoints: {"get_users": get("https://{{api_domain}}/users")},
+        parameters: {"api_domain": "api.domain.com"});
 
     await spec.call("get_users");
     verifyNever(transporter.get("https://{{api_domain}}/users", headers: {}));
@@ -69,9 +68,9 @@ void main() {
 
   test('should call method with global middlewares', () async {
     var transporter = MockTransporter();
-    var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"url": "https://api.domain.com/users", "method": "Get"}
-    });
+    var spec = Spec(
+        transporter: transporter,
+        endpoints: {"get_users": get("https://api.domain.com/users")});
     spec.onSend((Request request) {
       request.headers['authorization'] = 'token';
     });
@@ -83,9 +82,9 @@ void main() {
 
   test('should call get with headers', () async {
     var transporter = MockTransporter();
-    var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {"url": "https://domain.com/users", "method": "Get"}
-    });
+    var spec = Spec(
+        transporter: transporter,
+        endpoints: {"get_users": get("https://domain.com/users")});
 
     await spec.call("get_users", onSend: (Request request) {
       request.headers['authorization'] = 'token';
@@ -97,10 +96,7 @@ void main() {
   test('should call get with parameters', () async {
     var transporter = MockTransporter();
     var spec = Spec(transporter: transporter, endpoints: {
-      "get_users": {
-        "url": "https://{{api_domain}}/users/{{user_id}}",
-        "method": "Get"
-      }
+      "get_users": get("https://{{api_domain}}/users/{{user_id}}")
     }, parameters: {
       "api_domain": "api.domain.com"
     });

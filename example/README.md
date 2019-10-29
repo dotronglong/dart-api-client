@@ -6,10 +6,7 @@
 import 'package:api_client/api_client.dart';
 
 Spec spec = Spec(endpoints: {
-  "get_item": {
-    "url": "{{api_url}}/items",
-    "method": "get"
-  }
+  "get_item": get("{{api_url}}/items")
 }, parameters: {
    "api_url": "https://api.domain.com"
 });

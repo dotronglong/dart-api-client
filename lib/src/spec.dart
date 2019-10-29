@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:api_client/src/event/error_event.dart';
-import 'package:api_client/src/event/receive_response_event.dart';
 import 'package:emitter/emitter.dart';
 
+import 'event/error_event.dart';
+import 'event/receive_response_event.dart';
 import 'event/send_request_event.dart';
+import 'http_spec.dart';
 import 'method.dart';
 import 'middleware.dart';
 import 'replacer.dart';
@@ -22,13 +23,13 @@ class Spec {
   static const EVENT_ON_ERROR = 'error';
 
   var parameters = <String, String>{};
-  var endpoints = <String, Map<String, String>>{};
+  var endpoints = <String, HttpSpec>{};
   Replacer replacer = Replacer();
   Transporter transporter;
   EventEmitter _emitter = EventEmitter();
 
   Spec(
-      {Map<String, Map<String, String>> endpoints,
+      {Map<String, HttpSpec> endpoints,
       OnSendMiddleware onSend,
       OnReceiveMiddleware onReceive,
       OnErrorMiddleware onError,
@@ -84,19 +85,21 @@ class Spec {
       if (!this.endpoints.containsKey(name)) {
         throw Exception('$name does not exist');
       }
-      Map endpoint = this.endpoints[name];
-      if (!endpoint.containsKey(SPEC_URL) ||
-          !endpoint.containsKey(SPEC_METHOD)) {
+      HttpSpec endpoint = this.endpoints[name];
+      if (endpoint.method == null ||
+          endpoint.method.isEmpty ||
+          endpoint.url == null ||
+          endpoint.url.isEmpty) {
         throw Exception('Insufficient endpoint arguments');
       }
 
-      request = Request(endpoint[SPEC_URL], endpoint[SPEC_METHOD],
-          attributes: endpoint[SPEC_ATTRIBUTES]);
-      SendRequestEvent sendRequestEvent = SendRequestEvent(request);
-      await this._emitter.emit(EVENT_ON_SEND, sendRequestEvent);
+      request = Request(endpoint.url, endpoint.method,
+          attributes: endpoint.attributes);
       if (onSend != null) {
         onSend(request);
       }
+      SendRequestEvent sendRequestEvent = SendRequestEvent(request);
+      await this._emitter.emit(EVENT_ON_SEND, sendRequestEvent);
 
       String url = request.toString();
       url = this.replacer.replace(url, this.parameters);

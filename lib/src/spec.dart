@@ -143,7 +143,8 @@ class Spec {
     } catch (exception) {
       ErrorEvent errorEvent;
       if (exception is Error) {
-        errorEvent = ErrorEvent(request, response, Exception(exception.toString()));
+        errorEvent =
+            ErrorEvent(request, response, Exception(exception.toString()));
       } else {
         errorEvent = ErrorEvent(request, response, exception);
       }

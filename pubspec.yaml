@@ -1,6 +1,6 @@
 name: api_client
 description: A simple schema api client. Helps to deal with API calls via an API specification
-version: 2.1.0
+version: 2.1.1
 author: Lucas <me@dotronglong.com>
 homepage: https://github.com/dotronglong/dart-api-client
 

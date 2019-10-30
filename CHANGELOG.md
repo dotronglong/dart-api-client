@@ -1,3 +1,7 @@
+## [2.1.1] - Fix exception handling
+
+* Add support for Error
+
 ## [2.1.0] - Improve endpoint specification
 
 * Use verbs get, post, patch, put, delete

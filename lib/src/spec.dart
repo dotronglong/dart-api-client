@@ -141,7 +141,12 @@ class Spec {
         onReceive(request, response);
       }
     } catch (exception) {
-      ErrorEvent errorEvent = ErrorEvent(request, response, exception);
+      ErrorEvent errorEvent;
+      if (exception is Error) {
+        errorEvent = ErrorEvent(request, response, Exception(exception.toString()));
+      } else {
+        errorEvent = ErrorEvent(request, response, exception);
+      }
       await this._emitter.emit(EVENT_ON_ERROR, errorEvent);
     }
     return response;

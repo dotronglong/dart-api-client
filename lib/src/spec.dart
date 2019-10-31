@@ -149,6 +149,9 @@ class Spec {
         errorEvent = ErrorEvent(request, response, exception);
       }
       await this._emitter.emit(EVENT_ON_ERROR, errorEvent);
+      if (onError != null) {
+        onError(request, response, errorEvent.exception);
+      }
     }
     return response;
   }

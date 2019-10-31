@@ -1,3 +1,8 @@
+## [2.1.2] - Add onError on call
+
+* Execute `onError`
+* Update README.md
+
 ## [2.1.1] - Fix exception handling
 
 * Add support for Error

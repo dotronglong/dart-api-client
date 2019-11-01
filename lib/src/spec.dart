@@ -11,44 +11,38 @@ import 'middleware.dart';
 import 'replacer.dart';
 import 'request.dart';
 import 'response.dart';
-import 'transporter/http_transporter.dart';
 import 'transporter.dart';
 
 class Spec {
-  static const SPEC_URL = 'url';
-  static const SPEC_METHOD = 'method';
-  static const SPEC_ATTRIBUTES = 'attributes';
-  static const EVENT_ON_SEND = 'send';
-  static const EVENT_ON_RECEIVE = 'receive';
-  static const EVENT_ON_ERROR = 'error';
+  static const _ON_SEND = 'send';
+  static const _ON_RECEIVE = 'receive';
+  static const _ON_ERROR = 'error';
 
-  var parameters = <String, String>{};
-  var endpoints = <String, HttpSpec>{};
-  Replacer replacer = Replacer();
-  Transporter transporter;
+  Map<String, String> _parameters = {};
+  Map<String, HttpSpec> _endpoints = {};
+  Replacer _replacer = Replacer.factory();
+  Transporter _transporter = Transporter.factory();
   EventEmitter _emitter = EventEmitter();
 
   Spec(
       {Map<String, HttpSpec> endpoints,
+      Map<String, String> parameters,
+      Replacer replacer,
+      Transporter transporter,
       OnSendMiddleware onSend,
       OnReceiveMiddleware onReceive,
-      OnErrorMiddleware onError,
-      Map<String, String> parameters,
-      Transporter transporter}) {
-    if (endpoints != null) this.endpoints = endpoints;
+      OnErrorMiddleware onError}) {
+    if (endpoints != null) this._endpoints = endpoints;
+    if (parameters != null) this._parameters = parameters;
+    if (replacer != null) this._replacer = replacer;
+    if (transporter != null) this._transporter = transporter;
     if (onSend != null) this.onSend(onSend);
     if (onReceive != null) this.onReceive(onReceive);
     if (onError != null) this.onError(onError);
-    if (parameters != null) this.parameters = parameters;
-    if (transporter != null) {
-      this.transporter = transporter;
-    } else {
-      this.transporter = HttpTransporter();
-    }
   }
 
   void onSend(OnSendMiddleware onSend) {
-    this._emitter.on(EVENT_ON_SEND, (event) {
+    this._emitter.on(_ON_SEND, (event) {
       if (event is SendRequestEvent) {
         onSend(event.request);
       }
@@ -57,7 +51,7 @@ class Spec {
   }
 
   void onReceive(OnReceiveMiddleware onReceive) {
-    this._emitter.on(EVENT_ON_RECEIVE, (event) {
+    this._emitter.on(_ON_RECEIVE, (event) {
       if (event is ReceiveResponseEvent) {
         onReceive(event.request, event.response);
       }
@@ -66,7 +60,7 @@ class Spec {
   }
 
   void onError(OnErrorMiddleware onError) {
-    this._emitter.on(EVENT_ON_ERROR, (event) {
+    this._emitter.on(_ON_ERROR, (event) {
       if (event is ErrorEvent) {
         onError(event.request, event.response, event.exception);
       }
@@ -82,10 +76,10 @@ class Spec {
     Request request;
     Response response;
     try {
-      if (!this.endpoints.containsKey(name)) {
+      if (!this._endpoints.containsKey(name)) {
         throw Exception('$name does not exist');
       }
-      HttpSpec endpoint = this.endpoints[name];
+      HttpSpec endpoint = this._endpoints[name];
       if (endpoint.method == null ||
           endpoint.method.isEmpty ||
           endpoint.url == null ||
@@ -95,48 +89,49 @@ class Spec {
 
       request = Request(endpoint.url, endpoint.method,
           attributes: endpoint.attributes);
+      request.set("name", name);
       if (onSend != null) {
         onSend(request);
       }
       SendRequestEvent sendRequestEvent = SendRequestEvent(request);
-      await this._emitter.emit(EVENT_ON_SEND, sendRequestEvent);
+      await this._emitter.emit(_ON_SEND, sendRequestEvent);
 
       String url = request.toString();
-      url = this.replacer.replace(url, this.parameters);
+      url = this._replacer.replace(url, this._parameters);
       if (parameters != null) {
-        url = this.replacer.replace(url, parameters);
+        url = this._replacer.replace(url, parameters);
       }
 
       String method = request.method.toUpperCase();
       switch (method) {
         case Method.GET:
-          response = await this.transporter.get(url, headers: request.headers);
+          response = await this._transporter.get(url, headers: request.headers);
           break;
         case Method.POST:
           response = await this
-              .transporter
+              ._transporter
               .post(url, headers: request.headers, body: request.body);
           break;
         case Method.PUT:
           response = await this
-              .transporter
+              ._transporter
               .put(url, headers: request.headers, body: request.body);
           break;
         case Method.PATCH:
           response = await this
-              .transporter
+              ._transporter
               .patch(url, headers: request.headers, body: request.body);
           break;
         case Method.DELETE:
           response =
-              await this.transporter.delete(url, headers: request.headers);
+              await this._transporter.delete(url, headers: request.headers);
           break;
         default:
           throw Exception('Method $method is not supported');
       }
       ReceiveResponseEvent receiveResponseEvent =
           ReceiveResponseEvent(request, response);
-      await this._emitter.emit(EVENT_ON_RECEIVE, receiveResponseEvent);
+      await this._emitter.emit(_ON_RECEIVE, receiveResponseEvent);
       if (onReceive != null) {
         onReceive(request, response);
       }
@@ -148,7 +143,7 @@ class Spec {
       } else {
         errorEvent = ErrorEvent(request, response, exception);
       }
-      await this._emitter.emit(EVENT_ON_ERROR, errorEvent);
+      await this._emitter.emit(_ON_ERROR, errorEvent);
       if (onError != null) {
         onError(request, response, errorEvent.exception);
       }

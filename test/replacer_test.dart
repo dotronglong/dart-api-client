@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('replace parameters', () {
-    Replacer replacer = Replacer();
+    Replacer replacer = Replacer.factory();
     String source = 'a {{string}} to be replaced';
     String result = replacer.replace(source, {'string': 'new_string'});
     expect(source, 'a {{string}} to be replaced'); // source must be immutable
@@ -11,7 +11,7 @@ void main() {
   });
 
   test('replace parameters with different marker', () {
-    Replacer replacer = Replacer(markerStart: '[[', markerEnd: ']]');
+    Replacer replacer = Replacer.factory(markerStart: '[[', markerEnd: ']]');
     String source = 'a [[string]] to be replaced';
     String result = replacer.replace(source, {'string': 'new_string'});
     expect(source, 'a [[string]] to be replaced'); // source must be immutable

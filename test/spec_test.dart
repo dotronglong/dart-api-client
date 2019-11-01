@@ -15,8 +15,7 @@ void main() {
   });
 
   test('throws Exception: insufficient arguments', () {
-    var spec = Spec();
-    spec.endpoints.putIfAbsent("demo", () => HttpSpec("", ""));
+    var spec = Spec(endpoints: {"demo": HttpSpec("", "")});
     spec.onError((request, response, exception) {
       expect(exception, isNotNull);
       expect(exception.toString(),

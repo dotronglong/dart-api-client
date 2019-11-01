@@ -40,9 +40,11 @@ spec.call("get_pet", parameters: {"pet_id": 123})
 **Function Arguments** of `call`
 - `name`: (requires) name of spec
 - `parameters`: (optional) contextual parameters for current call
-- `onSend`, `onReceive`: (optional) see `Events`
+- `onSend`, `onReceive`, `onError`: (optional) see `Events`
 
 ### Events
+
+*Applicable for initializing `Spec` and on each `call`*
 
 - `onSend(Request request)` executes before request is sent
 - `onReceive(Request request, Response response)` executes after receiving response

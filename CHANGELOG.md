@@ -1,3 +1,15 @@
+## [2.2.0] - Improvement of Spec
+
+* Make endpoints, parameters, replacer and transporter become private
+* Set `name` as request's attribute
+* Make `Replacer` become abstract
+* Add `Transporter.factory()` and `Replacer.factory()`
+
+## [2.1.2] - Add onError on call
+
+* Execute `onError`
+* Update README.md
+
 ## [2.1.1] - Fix exception handling
 
 * Add support for Error
